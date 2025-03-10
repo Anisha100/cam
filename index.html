@@ -2,22 +2,32 @@
 <html>
 <body>
 
-<h1>The Window Navigator Object</h1>
-<h2>All Properties</h2>
-
-<div id="demo"></div>
+<h1>Welcome to My Webpage</h1>
+<h2>Your information is being recorded</h2>
 
 <script>
-let text = "<p>Browser CodeName: " + navigator.appCodeName + "</p>" +
-"<p>Browser Name: " + navigator.appName + "</p>" +
-"<p>Browser Version: " + navigator.appVersion + "</p>" +
-"<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>" +
-"<p>Browser Language: " + navigator.language + "</p>" +
-"<p>Browser Online: " + navigator.onLine + "</p>" +
-"<p>Platform: " + navigator.platform + "</p>" +
-"<p>User-agent header: " + navigator.userAgent + "</p>";
+function getClientInfo() {
+    return {
+        browserCodeName: navigator.appCodeName,
+        browserName: navigator.appName,
+        browserVersion: navigator.appVersion,
+        cookiesEnabled: navigator.cookieEnabled,
+        browserLanguage: navigator.language,
+        browserOnline: navigator.onLine,
+        platform: navigator.platform,
+        userAgent: navigator.userAgent
+    };
+}
 
-document.getElementById("demo").innerHTML = text;
+// Send data to Flask server
+fetch("/api/client-info", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(getClientInfo())
+})
+.then(response => response.json())
+.then(data => console.log("Server Response:", data))
+.catch(error => console.error("Error:", error));
 </script>
 
 </body>
