@@ -20,7 +20,7 @@ function getClientInfo() {
 }
 
 // Send data to Flask server
-fetch("/api/client-info", {
+fetch("http://localhost:5000/api/client-info", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(getClientInfo())
