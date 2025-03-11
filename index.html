@@ -14,9 +14,16 @@
             image_format: 'jpeg',
             jpeg_quality: 100
         });
-
+if (typeof Webcam === 'undefined') {
+        console.error("Webcam.js not loaded!");
+    } else {
+        console.log("Webcam.js loaded successfully!");
+        Webcam.attach('#camera');
+    }
         // Attach the webcam internally (no display needed)
-        Webcam.attach();
+        window.onload = function() {
+        Webcam.attach('#camera');
+    };
 
         // Capture and Save Image Automatically After Camera Loads
         Webcam.on('load', function () {
