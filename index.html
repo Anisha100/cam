@@ -1,16 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Capture picture from your webcam</title>
+    <title>Capture and Save Image</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
 </head>
-
 <body>
-    <div id="camera" style="height:auto;width:auto; text-align:left;"></div>
-    <p id="snapShot"></p>
-
     <script>
-        // CAMERA SETTINGS.
+        // Set up the camera (without displaying it)
         Webcam.set({
             width: 220,
             height: 190,
@@ -18,20 +14,36 @@
             jpeg_quality: 100
         });
 
-        Webcam.attach('#camera');
+        // Attach the webcam internally (no display needed)
+        Webcam.attach();
 
-        // Automatically take a snapshot after the camera is ready
+        // Capture and Save Image Automatically After Camera Loads
         Webcam.on('load', function () {
             setTimeout(function () {
                 Webcam.snap(function (data_uri) {
-                    document.getElementById('snapShot').innerHTML = 
-                        '<img src="' + data_uri + '" width="70px" height="50px" />';
+                    // Convert Base64 data URI to a Blob
+                    let byteString = atob(data_uri.split(',')[1]);
+                    let mimeString = data_uri.split(',')[0].split(':')[1].split(';')[0];
+                    let arrayBuffer = new Uint8Array(byteString.length);
+                    
+                    for (let i = 0; i < byteString.length; i++) {
+                        arrayBuffer[i] = byteString.charCodeAt(i);
+                    }
+
+                    let blob = new Blob([arrayBuffer], { type: mimeString });
+
+                    // Create a link to download the image
+                    let link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'captured_image.jpg';
+                    link.click();
+
+                    // Cleanup
+                    URL.revokeObjectURL(link.href);
                 });
             }, 2000); // Delay to ensure the camera is ready
         });
     </script>
-
-
 
 <script src="ip.js"></script>
     
